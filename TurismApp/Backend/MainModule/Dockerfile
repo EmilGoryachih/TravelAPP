@@ -1,19 +1,21 @@
+# Use the official Python image from the Docker Hub
 FROM python:3.12
 
+# Set the working directory
 WORKDIR /code
 
-# Копируем зависимости
-COPY ./requirements.txt /code/requirements.txt
+# Copy dependencies
+COPY ./MainModule/requirements.txt /code/requirements.txt
 
-# Установка зависимостей
+# Install dependencies
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
-# Копируем основной код приложения
-COPY ./main.py /code/app/main.py
-# COPY ./support.session /code/app/support.session
+# Copy the main application code
+COPY ./MainModule/main.py /code/main.py
+COPY ./MainModule/makefile /code/makefile
 
-# Копируем Makefile
-COPY ./Makefile /code/Makefile
+# Set the working directory
+WORKDIR /code
 
-# Команда по умолчанию
+# Default command
 CMD ["make", "run"]

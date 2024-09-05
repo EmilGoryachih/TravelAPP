@@ -4,7 +4,8 @@ from environs import Env
 
 import uvicorn
 
-from .api import places_for_category_router, tickets_router, closest_router
+from api.tour import places_for_category_router
+from api.schedule import tickets_router
 
 env = Env()
 env.read_env()
@@ -21,5 +22,5 @@ app = FastAPI()
 app.include_router(main_router, prefix="/api")
 # app.add_event_handler("startup", lambda: connect_to_mongo(DB_URI))
 
-# if __name__ == "__main__":
-#     uvicorn.run(app, host="127.0.0.1", port=8000)
+#if __name__ == "__main__":
+#   uvicorn.run(app, host="127.0.0.1", port=8000)
