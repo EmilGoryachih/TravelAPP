@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   mainmodule:
     build:
@@ -6,14 +8,14 @@ services:
     volumes:
       - ./MainModule:/code
     ports:
-      - 5000:80
+      - "5000:80"
 
   bot:
     build:
       context: ./TextBot
       dockerfile: Dockerfile
     ports:
-      - 5001:80
+      - "5001:80"
     env_file:
       - .env
     volumes:
@@ -24,4 +26,19 @@ services:
       context: ./Sound
       dockerfile: Dockerfile
     ports:
-      - 5002:80
+      - "5002:80"
+
+  database:
+    image: postgres
+    environment:
+      POSTGRES_DB: turist_app
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  postgres-data:
