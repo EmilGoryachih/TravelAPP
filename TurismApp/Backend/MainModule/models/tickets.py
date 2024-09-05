@@ -21,12 +21,6 @@ class To(BaseModel):
     code: str
 
 
-class Search(BaseModel):
-    from_: From = Field(..., alias='from')
-    to: To
-    date: str
-
-
 class Codes(BaseModel):
     sirena: Optional[str]
     iata: Optional[str]
@@ -36,9 +30,9 @@ class Codes(BaseModel):
 class Carrier(BaseModel):
     code: int
     title: str
-    codes: Any
+    codes: Codes
     address: Optional[str]
-    url: Any
+    url: str
     email: Optional[str]
     contacts: str
     phone: str
@@ -60,7 +54,7 @@ class Thread(BaseModel):
     vehicle: Optional[str]
     express_type: Any
     transport_type: str
-    transport_subtype: Any
+    transport_subtype: TransportSubtype
     uid: str
     thread_method_link: str
 
@@ -87,20 +81,9 @@ class To1(BaseModel):
     transport_type: str
 
 
-class Price(BaseModel):
-    whole: int
-    cents: int
-
-
-class Place(BaseModel):
-    name: Any
-    price: Price
-    currency: str
-
-
-class TicketsInfo(BaseModel):
+class TicketsInfoItem(BaseModel):
     et_marker: bool
-    places: List[Place]
+    places: List
 
 
 class Segment(BaseModel):
@@ -117,11 +100,11 @@ class Segment(BaseModel):
     departure: str
     arrival: str
     has_transfers: bool
-    tickets_info: TicketsInfo
+    tickets_info: Optional[TicketsInfoItem]
 
 
 class ScheduleResponse(BaseModel):
     search: Any
     segments: List[Segment]
-    interval_segments: List
+    interval_segments: List[Any]
     pagination: Any

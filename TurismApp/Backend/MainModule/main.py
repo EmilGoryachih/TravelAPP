@@ -4,7 +4,7 @@ from environs import Env
 
 import uvicorn
 
-from .api import places_for_category_router
+from .api import places_for_category_router, tickets_router
 
 
 env = Env()
@@ -15,7 +15,7 @@ logging.basicConfig(level=logging.INFO)
 
 main_router = APIRouter()
 main_router.include_router(places_for_category_router)
-
+main_router.include_router(tickets_router)
 
 app = FastAPI()
 app.include_router(main_router, prefix="/api")
