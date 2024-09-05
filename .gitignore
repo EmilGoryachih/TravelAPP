@@ -5,3 +5,4 @@ TurismApp/Backend/MainModule/api/__pycache__/
 TurismApp/Backend/MainModule/api/schedule/__pycache__/
 TurismApp/Backend/MainModule/api/tour/__pycache__/
 TurismApp/Backend/MainModule/models/__pycache__/
+TurismApp/Backend/MainModule/api/closest/__pycache__/
