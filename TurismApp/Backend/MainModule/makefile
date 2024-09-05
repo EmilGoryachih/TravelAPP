@@ -1,4 +1,4 @@
-ru#!make
+#!make
 
 .PHONY: run
 run:
