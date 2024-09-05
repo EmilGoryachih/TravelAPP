@@ -1,1 +1,2 @@
-from .tour.PlacesForCategory import router as places_for_category_router
+from .PlacesForCategory import places_for_category_router
+from .scedule import tickets_router

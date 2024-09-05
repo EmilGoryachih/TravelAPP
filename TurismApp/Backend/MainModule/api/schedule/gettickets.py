@@ -2,7 +2,7 @@ from fastapi import APIRouter
 import requests
 import json
 from environs import Env
-from ...models.tickets import ScheduleResponse
+from ...models import ScheduleResponse
 from pydantic import BaseModel
 from typing import Any
 from random import randint
@@ -102,16 +102,19 @@ async def post_tickets(from_: str, to: str, time: str):
         ticket = segment.thread
         from_s = segment.from_
         tos = segment.to
-        prices = segment.tickets_info.places
-        if (len(prices) == 0):
-            if (ticket.transport_type == "plane"):
-                price = randint(8000, 20000)
-            else:
-                price = randint(4000, 10000)
-        else:
-            price = prices[0].price.whole
-
         print(ticket)
+        places = segment.tickets_info
+        try:
+            prices = places.places
+            try:
+                price = min(list(map(lambda x: x.price.whole, prices)))
+            except:
+                if (ticket.transport_type == "plane"):
+                    price = randint(8000, 20000)
+                else:
+                    price = randint(4000, 10000)
+        except:
+            price = randint(4000, 10000)
         try:
             if (ticket.transport_type != "plane"):
                 tickets.append(Ticket(code=ticket.number,
@@ -126,9 +129,8 @@ async def post_tickets(from_: str, to: str, time: str):
                                     transport_name=ticket.vehicle if ticket.transport_type != None else ticket.vehicle,
                                     date=segment.departure,
                                     price=price,
-                                    link=f"https://travel.yandex.ru/avia/flights/{(ticket.number).replace(" ", "-")}/?when={time}"))
+                                    # link=f"https://travel.yandex.ru/avia/flights/{(ticket.number).replace(" ", "-")}/?when={time}"))
+                                    link=f"https://travel.yandex.ru/avia/order/?forward={(ticket.number).replace(" ", "+")}.{time}&fromId=c{codes[from_]}&toId=c{codes[to]}&when={time}"))
         except:
             pass
-    return tickets
-
-#c213 c37
+    return sorted(tickets, key=lambda x: x.price)
