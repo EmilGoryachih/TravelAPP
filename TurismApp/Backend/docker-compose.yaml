@@ -1,0 +1,25 @@
+services:
+  mainmodule:
+    build:
+      context: .MainModule
+      dockerfile: .MainModule/Dockerfile
+    env_file:
+      - ./MainModule/.env  # Указан правильный относительный путь к файлу .env
+    command: make run
+
+  bot:
+    build:
+      context: ./TextBot
+      dockerfile: ./TextBot/Dockerfile
+    ports:
+      - 5001:80
+
+    volumes:
+      - ./TextBot/support.session:/code/app/support.session
+
+  sound:
+    build:
+      context: ./Sound
+      dockerfile: Dockerfile
+    ports:
+      - 5002:80
