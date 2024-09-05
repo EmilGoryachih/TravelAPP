@@ -2,7 +2,7 @@ from fastapi import APIRouter
 import requests
 import json
 from environs import Env
-from ...models.tickets import ScheduleResponse
+from models.tickets import ScheduleResponse
 from pydantic import BaseModel
 from typing import Any
 from random import randint

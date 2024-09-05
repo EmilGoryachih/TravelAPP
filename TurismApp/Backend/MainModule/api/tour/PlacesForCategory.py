@@ -2,7 +2,7 @@ import requests
 from environs import Env
 from fastapi import APIRouter
 
-from ...models import Places
+from models.Places import Places
 
 
 env = Env()
