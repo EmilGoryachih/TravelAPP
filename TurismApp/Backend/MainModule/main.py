@@ -6,7 +6,6 @@ import uvicorn
 
 from .api import places_for_category_router, tickets_router
 
-
 env = Env()
 env.read_env()
 logging.basicConfig(level=logging.INFO)
@@ -23,4 +22,3 @@ app.include_router(main_router, prefix="/api")
 
 # if __name__ == "__main__":
 #     uvicorn.run(app, host="127.0.0.1", port=8000)
-

@@ -18,6 +18,4 @@ def get_places_for_category(category: str, city: str, lat: float, lon: float):
     response = requests.get(url)
     data = response.json()
 
-    print(data)
-
     return data
