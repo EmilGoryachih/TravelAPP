@@ -23,7 +23,7 @@ class Closest(BaseModel):
 
 @router.post("/")
 async def post_closest(lat: float, lon: float, type: str):
-    link = f'https://search-maps.yandex.ru/v1/?apikey={key}&text={type}&lang=ru_RU&ll={lat},{lon}&spn=0.002,0.002&type=biz&rspn=1&results=50'
+    link = f'https://search-maps.yandex.ru/v1/?apikey={key}&text={type}&lang=ru_RU&ll={lat},{lon}&spn=0.01,0.01&type=biz&rspn=1&results=50'
     response = requests.get(link)
 
     resp = ClosestResponse.model_validate_json(response.text)
@@ -34,10 +34,13 @@ async def post_closest(lat: float, lon: float, type: str):
 
     min_length = float('inf')
 
+    print(len(rlist))
+
     for place in rlist:
         ll = place.geometry.coordinates
         length = hypot((lon - ll[1])**2, (lat - ll[0])**2)
         if (length < min_length):
+            min_length = length
             closest = Closest(name=place.properties.name, point=Point(lat=ll[0], lon=ll[1]))
 
     return closest
