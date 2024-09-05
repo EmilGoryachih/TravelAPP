@@ -129,7 +129,6 @@ async def post_tickets(from_: str, to: str, time: str):
                                     transport_name=ticket.vehicle if ticket.transport_type != None else ticket.vehicle,
                                     date=segment.departure,
                                     price=price,
-                                    # link=f"https://travel.yandex.ru/avia/flights/{(ticket.number).replace(" ", "-")}/?when={time}"))
                                     link=f"https://travel.yandex.ru/avia/order/?forward={(ticket.number).replace(" ", "+")}.{time}&fromId=c{codes[from_]}&toId=c{codes[to]}&when={time}"))
         except:
             pass

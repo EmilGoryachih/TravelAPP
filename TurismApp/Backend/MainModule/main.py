@@ -6,6 +6,7 @@ import uvicorn
 
 from api.tour import places_for_category_router
 from api.schedule import tickets_router
+from api.closest import closest_router
 
 env = Env()
 env.read_env()

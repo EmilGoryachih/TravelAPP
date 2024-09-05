@@ -3,7 +3,7 @@ import requests
 import json
 from environs import Env
 from pydantic import BaseModel
-from ...models import ClosestResponse
+from models import ClosestResponse
 from math import hypot
 
 
