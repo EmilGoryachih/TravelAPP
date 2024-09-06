@@ -41,8 +41,6 @@ async def post_closest(lat: float, lon: float, type: str, features: List[str] = 
 
     min_length = float('inf')
 
-    # featuresSet = set(features)
-
     maxFeatureFit = 0
 
     for place in rlist:
@@ -73,7 +71,5 @@ async def post_closest(lat: float, lon: float, type: str, features: List[str] = 
             if (length < min_length):
                 min_length = length
                 closest = Closest(name=place.properties.name, point=Point(lat=ll[0], lon=ll[1]), featuresSet=curFeaturesSet)
-                print(closest)
-        # closest.append(Closest(name=place.properties.name, point=Point(lat=ll[0], lon=ll[1]), featuresSet=list(curFeaturesSet)))
-
+                
     return closest
