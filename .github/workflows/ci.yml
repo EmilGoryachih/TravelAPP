@@ -27,7 +27,7 @@ jobs:
     - name: Install dependencies
       run: |
         python3 -m pip install --upgrade pip
-        pip install fastapi pytest httpx uvicorn datetime gtts
+        pip install fastapi pytest httpx uvicorn datetime gtts environs
 
     - name: Run tests
       run: |
