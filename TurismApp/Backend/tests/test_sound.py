@@ -8,3 +8,6 @@ def test_speech_to_text():
     response = client.get(f"/speechToText?text={text}")
     assert response.status_code == 200
     assert response.headers["content-type"] == "audio/mpeg"
+
+    audio_data = response.content
+    assert audio_data.startswith(b'\xff\xfb')
