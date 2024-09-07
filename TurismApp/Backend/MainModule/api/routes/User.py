@@ -5,12 +5,16 @@ from dbModels.User import UserModel
 from dbModels.crud import create_user, get_all_users
 from db.session import fastapi_get_db
 
+from dbModels.crud import UserBasicResponse
+
 router = APIRouter()
 
-@router.post("/", response_model=User)
+
+@router.post("/", response_model=UserBasicResponse)
 async def create_user_endpoint(user: User, db: AsyncSession = Depends(fastapi_get_db)):
     db_user = await create_user(db, user)
     return db_user
+
 
 @router.get("/all")
 async def create_user_endpoint(db: AsyncSession = Depends(fastapi_get_db)):

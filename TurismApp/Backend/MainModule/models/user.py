@@ -1,14 +1,15 @@
 from pydantic import BaseModel
 import datetime
+from typing import List
 
 
 class User(BaseModel):
     name: str
     surname: str
+    email: str
     phone: str
-    birth_date: datetime.date
-    gender: bool
-    disabled: bool
-
-
-
+    dateOfBirth: datetime.date
+    password: str
+    gender: str
+    isDisabled: bool
+    selectedInterests: List[str]
