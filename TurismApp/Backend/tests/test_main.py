@@ -32,7 +32,7 @@ def test_find_closest():
 
     # Check the data of point
 
-    point = response__json["point"]
+    point = response_json["point"]
 
     assert "lat" in point
     assert "lon" in point
@@ -40,7 +40,7 @@ def test_find_closest():
     assert isinstance(point["lat"], float)
     assert isinstance(point["lon"], float)
 
-    for feature in response__json["featuresSet"]:
+    for feature in response_json["featuresSet"]:
         assert isinstance(feature, dict)
         assert "type" in feature
         assert "value" in feature
