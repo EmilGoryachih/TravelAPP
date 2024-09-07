@@ -1,33 +1,36 @@
-from sqlalchemy.orm import relationship
-from sqlalchemy.ext.asyncio import AsyncSession
+import uuid
 
-from .Friends import user_friends
+from sqlalchemy.orm import relationship
+
+# from .Friends import user_friends
 from .base import BaseModel
 
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy import Column, Integer, String, Boolean, DateTime
-import datetime
+from sqlalchemy import cast, Date
 from sqlalchemy import String
-from models.user import User
+
+from .Friends import user_friends
 
 
 class UserModel(BaseModel):
     __tablename__ = 'users'
 
-    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True, nullable=False)
     name = Column(String(length=50), index=True, nullable=False)
     surname = Column(String(length=50), index=True, nullable=True)
     phone = Column(String(length=15), index=True, nullable=True)
-    birth_date = Column(DateTime, index=True, nullable=True)
+    birth_date = Column(Date, index=True, nullable=True)
     gender = Column(Boolean, index=True, nullable=True)
     disabled = Column(Boolean, index=True, default=False)
 
-    # Relationship with itself through the junction table
+    # Define the many-to-many relationship
     friends = relationship(
-        'User',
+        'UserModel',
         secondary=user_friends,
         primaryjoin=id == user_friends.c.user_id,
         secondaryjoin=id == user_friends.c.friend_id,
-        backref='friends'
+        backref='friend_of'
     )
 
     def __repr__(self) -> str:
@@ -39,17 +42,3 @@ class UserModel(BaseModel):
 
 
 
-async def create_user(db: AsyncSession, user: User):
-    db_user = UserModel(
-        id=1,
-        name=user.name,
-        surname=user.surname,
-        phone=user.phone,
-        birth_date=user.birth_date,
-        gender=user.gender,
-        disabled=user.disabled,
-    )
-    db.add(db_user)
-    await db.commit()
-    await db.refresh(db_user)
-    return db_user

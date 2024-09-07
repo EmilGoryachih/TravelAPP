@@ -6,10 +6,8 @@ import uvicorn
 
 from init_db import init_db
 
-from api.tour import places_for_category_router
-from api.schedule import tickets_router
-from api.closest import closest_router
-from api.Users import user_router
+from api.main import api_router
+
 
 
 env = Env()
@@ -19,10 +17,7 @@ logging.basicConfig(level=logging.INFO)
 # DB_URI = env.str("DB_URI")
 
 main_router = APIRouter()
-main_router.include_router(places_for_category_router)
-main_router.include_router(tickets_router)
-main_router.include_router(closest_router)
-main_router.include_router(user_router)
+main_router.include_router(api_router)
 
 
 app = FastAPI()

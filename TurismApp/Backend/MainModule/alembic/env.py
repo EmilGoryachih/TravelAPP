@@ -16,7 +16,7 @@ sys.path.append(str(pathlib.Path(__file__).resolve().parents[1]))
 
 from models.user import User
 from dbModels.User import UserModel
-# from dbModels.Friends import user_friends
+from dbModels.Friends import user_friends
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

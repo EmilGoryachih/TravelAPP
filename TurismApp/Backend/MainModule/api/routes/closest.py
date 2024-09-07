@@ -11,7 +11,7 @@ env = Env()
 env.read_env()
 key = env.str("YANDEX_KEY_FIND_PLACE")
 
-router = APIRouter(prefix="/closest")
+router = APIRouter()
 
 class Point(BaseModel):
     lat: float
