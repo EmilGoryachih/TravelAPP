@@ -1,5 +1,4 @@
 venv/
-TurismApp/Backend/MainModule/.env
 TurismApp/Backend/MainModule/__pycache__/
 TurismApp/Backend/MainModule/api/__pycache__/
 TurismApp/Backend/MainModule/api/schedule/__pycache__/
