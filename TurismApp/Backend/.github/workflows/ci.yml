@@ -1,0 +1,35 @@
+# .github/workflows/ci.yml
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    branches:
+      - main
+      - dev
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.12
+
+    - name: Install dependencies
+      run: |
+        python3 -m pip install --upgrade pip
+        pip install fastapi pytest httpx uvicorn datetime gtts
+
+    - name: Run tests
+      run: |
+        pytest test_main.py
+        pytest test_sound.py

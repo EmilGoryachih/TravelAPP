@@ -5,7 +5,7 @@ from environs import Env
 from pydantic import BaseModel
 from models import ClosestResponse
 from math import hypot
-from typing import List, Any
+from typing import List, Any, Optional
 
 
 env = Env()
@@ -27,11 +27,19 @@ class Closest(BaseModel):
     point: Point
     featuresSet: List[Any]
 
+class ClosestRequest(BaseModel):
+    lat: float
+    lon: float
+    type: str
+    features: Optional[List[str]] = []
+
 @router.post("/")
-async def post_closest(lat: float, lon: float, type: str, features: List[str] = []):
-    link = f'https://search-maps.yandex.ru/v1/?apikey={key}&text={type}&lang=ru_RU&ll={lat},{lon}&spn=0.1,0.1&type=biz&rspn=1&results=50'
+async def post_closest(request: ClosestRequest):
+    link = f'https://search-maps.yandex.ru/v1/?apikey={key}&text={request.type}&lang=ru_RU&ll={request.lat},{request.lon}&spn=0.1,0.1&type=biz&rspn=1&results=50'
     
     response = requests.get(link)
+
+    print(response.text)
 
     resp = ClosestResponse.model_validate_json(response.text)
 
@@ -46,7 +54,7 @@ async def post_closest(lat: float, lon: float, type: str, features: List[str] = 
     for place in rlist:
         curFeatureFit = 0
         ll = place.geometry.coordinates
-        length = hypot((lon - ll[1])**2, (lat - ll[0])**2)
+        length = hypot((request.lon - ll[1])**2, (request.lat - ll[0])**2)
         try:
             curFeaturesList = list(map(lambda x: x, place.properties.CompanyMetaData.Features))
         except:
@@ -64,7 +72,7 @@ async def post_closest(lat: float, lon: float, type: str, features: List[str] = 
             else:
                 curFeaturesSet.append(Feature(type=feature.id, value=0))
         for feature in curFeaturesSet:
-            if (feature.type in features):
+            if (feature.type in request.features):
                 curFeatureFit += 1
         if (curFeatureFit >= maxFeatureFit):
             maxFeatureFit = curFeatureFit

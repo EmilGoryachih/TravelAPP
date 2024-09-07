@@ -4,7 +4,7 @@ import json
 from environs import Env
 from models.tickets import ScheduleResponse
 from pydantic import BaseModel
-from typing import Any
+from typing import Any, List
 from random import randint
 
 env = Env()
@@ -84,11 +84,20 @@ class Ticket(BaseModel):
     transport_name: str
     link: str
     date: str
+    time: str
     price: int
 
+class TicketRequest(BaseModel):
+    from_: str
+    to: str
+    time: str
+
+class Tickets(BaseModel):
+    tickets: List[Ticket]
+
 @router.post("/")
-async def post_tickets(from_: str, to: str, time: str):
-    link = f"https://api.rasp.yandex.net/v3.0/search/?apikey={key}&format=json&from=c{codes[from_]}&to=c{codes[to]}&date={time}"
+async def post_tickets(request: TicketRequest):
+    link = f"https://api.rasp.yandex.net/v3.0/search/?apikey={key}&format=json&from=c{codes[request.from_]}&to=c{codes[request.to]}&date={request.time}"
 
     response = requests.get(link)
 
@@ -102,7 +111,6 @@ async def post_tickets(from_: str, to: str, time: str):
         ticket = segment.thread
         from_s = segment.from_
         tos = segment.to
-        print(ticket)
         places = segment.tickets_info
         try:
             prices = places.places
@@ -120,16 +128,18 @@ async def post_tickets(from_: str, to: str, time: str):
                 tickets.append(Ticket(code=ticket.number,
                                     transport_type=ticket.transport_type,
                                     transport_name=ticket.transport_type if ticket.vehicle == None else ticket.vehicle,
-                                    date=segment.departure,
+                                    date=segment.departure[:segment.departure.index("T")],
+                                    time=segment.departure[segment.departure.index("T")+1:],
                                     price=price,
-                                    link=f"https://rasp.yandex.ru/thread/{ticket.uid}?departure_from={segment.departure[:segment.departure.index("+")].replace("T", "+")}&station_from={from_s.code[1:]}&station_to={tos.code[1:]}&to_city={codes[to]}"))
+                                    link=f"https://rasp.yandex.ru/thread/{ticket.uid}?departure_from={segment.departure[:segment.departure.index("+")].replace("T", "+")}&station_from={from_s.code[1:]}&station_to={tos.code[1:]}&to_city={codes[request.to]}"))
             else:
                 tickets.append(Ticket(code=ticket.number, 
                                     transport_type=ticket.transport_type,
                                     transport_name=ticket.vehicle if ticket.transport_type != None else ticket.vehicle,
-                                    date=segment.departure,
+                                    date=segment.departure[:segment.departure.index("T")],
+                                    time=segment.departure[segment.departure.index("T")+1:],
                                     price=price,
-                                    link=f"https://travel.yandex.ru/avia/order/?forward={(ticket.number).replace(" ", "+")}.{time}&fromId=c{codes[from_]}&toId=c{codes[to]}&when={time}"))
+                                    link=f"https://travel.yandex.ru/avia/order/?forward={(ticket.number).replace(" ", "+")}.{request.time}&fromId=c{codes[request.from_]}&toId=c{codes[request.to]}&when={request.time}"))
         except:
             pass
-    return sorted(tickets, key=lambda x: x.price)
+    return Tickets(tickets=sorted(tickets, key=lambda x: x.price))
