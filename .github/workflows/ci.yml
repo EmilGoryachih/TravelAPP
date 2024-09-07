@@ -31,5 +31,6 @@ jobs:
 
     - name: Run tests
       run: |
-        pytest TurismApp/Backend/tests/test_main.py
-        pytest TurismApp/Backend/tests/test_sound.py
+        cd TurismApp/Backend
+        pytest tests/test_main.py
+        pytest tests/test_sound.py
