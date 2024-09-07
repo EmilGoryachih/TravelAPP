@@ -56,6 +56,26 @@ def test_get_tickets():
     response = client.post("/api/tickets", json=request_data)
     assert response.status_code == 200
 
+    response_json = response.json()
+    assert "tickets" in response_json
+    assert isinstance(response_json["tickets"], list)
+    for ticket in response_json["tickets"]:
+        assert code in ticket
+        assert transport_type in ticket
+        assert transport_name in ticket
+        assert link in ticket
+        assert date in ticket
+        assert time in ticket
+        assert price in ticket
+        assert isinstance(ticket["code"], str)
+        assert isinstance(ticket["transport_type"], str)
+        assert isinstance(ticket["transport_name"], str)
+        assert isinstance(ticket["link"], str)
+        assert isinstance(ticket["date"], str)
+        assert isinstance(ticket["time"], str)
+        assert isinstance(ticket["price"], int)
+        
+
 def test_get_places_for_category():
     request_data = {
         "category": "Музей",
