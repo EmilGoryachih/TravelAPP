@@ -10,4 +10,4 @@ def test_speech_to_text():
     assert response.headers["content-type"] == "audio/mpeg"
 
     audio_data = response.content
-    assert audio_data.startswith(b'\xff\xfb')
+    assert audio_data.startswith(b'\xff\xf3')
