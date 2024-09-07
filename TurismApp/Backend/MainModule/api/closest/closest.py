@@ -14,18 +14,18 @@ key = env.str("YANDEX_KEY_FIND_PLACE")
 
 router = APIRouter(prefix="/closest")
 
-class Point(BaseModel):
-    lat: float
-    lon: float 
-
 class Feature(BaseModel):
     type: str
     value: int
 
+class Point(BaseModel):
+    lat: float
+    lon: float 
+
 class Closest(BaseModel):
     name: str
     point: Point
-    featuresSet: List[Any]
+    featuresSet: List[Feature]
 
 class ClosestRequest(BaseModel):
     lat: float

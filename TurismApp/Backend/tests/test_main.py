@@ -2,6 +2,7 @@ from fastapi.testclient import TestClient
 from MainModule import app
 from datetime import *
 from pydantic import BaseModel
+from jsonschema import validate
 
 class Request(BaseModel):
     lat: float
@@ -11,6 +12,9 @@ class Request(BaseModel):
 client = TestClient(app)
 
 def test_find_closest():
+    response_schema = {
+        'name': 
+    }
     request_data = {
         "lat": 37.620661,
         "lon": 55.756428,
@@ -18,6 +22,34 @@ def test_find_closest():
     }
     response = client.post("/api/closest", json=request_data)
     assert response.status_code == 200
+    response_json = response.json()
+
+    # Check for the presence of specific keys
+    assert "name" in response_json
+    assert "point" in response_json
+    assert "featuresSet" in response_json
+
+    # Check the data types of the fields
+    assert isinstance(response_json["name"], str)
+    assert isinstance(response_json["point"], dict)
+    assert isinstance(response_json["featuresSet"], list)
+
+    # Check the data of point
+
+    point = response__json["point"]
+
+    assert "lat" in point
+    assert "lon" in point
+
+    assert isinstance(point["lat"], float)
+    assert isinstance(point["lon"], float)
+
+    for feature in response__json["featuresSet"]:
+        assert isinstance(feature, dict)
+        assert "type" in feature
+        assert "value" in feature
+        assert isinstance(feature["type"], str)
+        assert isinstance(feature["value"], int)
 
 def test_get_tickets():
     request_data = {
