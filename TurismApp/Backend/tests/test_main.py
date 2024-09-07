@@ -2,7 +2,6 @@ from fastapi.testclient import TestClient
 from MainModule import app
 from datetime import *
 from pydantic import BaseModel
-from jsonschema import validate
 
 class Request(BaseModel):
     lat: float
@@ -12,9 +11,6 @@ class Request(BaseModel):
 client = TestClient(app)
 
 def test_find_closest():
-    response_schema = {
-        'name': 
-    }
     request_data = {
         "lat": 37.620661,
         "lon": 55.756428,
