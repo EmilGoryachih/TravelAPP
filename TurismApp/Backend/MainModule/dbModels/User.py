@@ -10,6 +10,8 @@ from sqlalchemy import Column, Integer, String, Boolean, DateTime
 from sqlalchemy import cast, Date
 from sqlalchemy import String
 from sqlalchemy import JSON
+from sqlalchemy.sql import expression
+
 
 
 from .Friends import user_friends
@@ -34,7 +36,8 @@ class UserModel(BaseModel):
         secondary=user_friends,
         primaryjoin=id == user_friends.c.user_id,
         secondaryjoin=id == user_friends.c.friend_id,
-        backref='friend_of'
+        lazy="joined",  # Try setting lazy="joined" or lazy="subquery"
+        backref='friends_with'
     )
 
     def __repr__(self) -> str:
