@@ -17,7 +17,7 @@ services:
     ports:
       - "5001:80"
     env_file:
-      - TextBot/.env
+      - .env
     volumes:
       - ./TextBot/support.session:/code/app/support.session
 
