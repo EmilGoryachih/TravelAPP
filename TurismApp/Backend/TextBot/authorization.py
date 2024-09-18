@@ -16,8 +16,10 @@ if not client.is_user_authorized():
     client.send_code_request(phone)
     try:
         client.sign_in(phone, input('Enter the code: '))
+        print('Successfully signed in!')
+
     except:
         print('Failed to sign in')
 
-print('Successfully signed in!')
+
 client.disconnect()
