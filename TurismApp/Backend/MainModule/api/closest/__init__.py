@@ -1,1 +1,0 @@
-from .closest import router as closest_router
