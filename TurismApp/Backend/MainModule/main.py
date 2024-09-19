@@ -4,9 +4,11 @@ from environs import Env
 
 import uvicorn
 
-from api.tour import places_for_category_router
-from api.schedule import tickets_router
-from api.closest import closest_router
+from init_db import init_db
+
+from api.main import api_router
+
+
 
 env = Env()
 env.read_env()
@@ -15,12 +17,15 @@ logging.basicConfig(level=logging.INFO)
 # DB_URI = env.str("DB_URI")
 
 main_router = APIRouter()
-main_router.include_router(places_for_category_router)
-main_router.include_router(tickets_router)
-main_router.include_router(closest_router)
+main_router.include_router(api_router)
+
 
 app = FastAPI()
 app.include_router(main_router, prefix="/api")
+
+@app.on_event("startup")
+async def on_startup():
+    await init_db()
 # app.add_event_handler("startup", lambda: connect_to_mongo(DB_URI))
 
 #if __name__ == "__main__":
